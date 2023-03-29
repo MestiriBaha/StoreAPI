@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Text.Json.Serialization;
 
 namespace BookStoreAPI.Models
 {
@@ -9,6 +10,7 @@ namespace BookStoreAPI.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public String?  ID  { get; set; }
         [BsonElement("Name")]
+        [JsonPropertyName("Name")]
         public String BookName { get; set; } = null!;
 
         public Decimal Price { get; set; } 
