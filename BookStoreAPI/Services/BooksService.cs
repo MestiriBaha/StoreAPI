@@ -7,15 +7,20 @@ namespace BookStoreAPI.Services
     public class BooksService
     {
 
-        private readonly IMongoCollection<Book> _bookcollection; 
+        private readonly IMongoCollection<Book> _bookcollection ; 
         public BooksService(IOptions<BookStoreDatabase> bookStoreDatabaseSettings)
         {
-            var mongoclient = new MongoClient(bookStoreDatabaseSettings.Value.ConnectionString);
+            var mongoclient = new MongoClient(bookStoreDatabaseSettings.Value.ConnectionURI);
             var mongoDatabase = mongoclient.GetDatabase(bookStoreDatabaseSettings.Value.DatabaseName);
-            var mongoDbCollection = mongoDatabase.GetCollection<Book>(bookStoreDatabaseSettings.Value.BooksCollectionName); 
-        }   
+             _bookcollection = mongoDatabase.GetCollection<Book>(bookStoreDatabaseSettings.Value.CollectionName); 
+        }
         //CRUD services ! 
-        public async Task<List<Book>> GetAsync() => await _bookcollection.Find(_ => true ).ToListAsync();   
+        public async Task<IEnumerable<Book>> GetAsync()
+        {
+            var filter = Builders<Book>.Filter.Empty;
+           // var options = new FindOptions<Book>();
+            return  await _bookcollection.Find(filter).ToListAsync();
+        } 
         public async Task<Book?> GetBookAsync(string Id ) => await _bookcollection.Find(x => x.ID==Id).FirstOrDefaultAsync();
 
         public async Task CreateAsync(Book newBook) => await _bookcollection.InsertOneAsync(newBook);

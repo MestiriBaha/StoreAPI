@@ -2,8 +2,8 @@
 {
     public class BookStoreDatabase
     {
-        public String? ConnectionString { get; set; }
+        public String? ConnectionURI { get; set; }
         public String? DatabaseName { get; set; }
-        public String BooksCollectionName { get; set; } = null!;
+        public String CollectionName { get; set; } = null!;
     }
 }
